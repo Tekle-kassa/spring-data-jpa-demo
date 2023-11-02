@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -51,7 +53,18 @@ public class Student {
             nullable = false
     )
     private Integer age;
-
+    @OneToOne(
+            mappedBy = "student",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST,CascadeType.REMOVE}
+    )
+    private StudentIdCard studentIdCard;
+    @OneToMany(
+            mappedBy = "student",
+            orphanRemoval = true,
+            cascade ={CascadeType.PERSIST,CascadeType.REMOVE}
+    )
+    private List<Book> books=new ArrayList<>();
     public Student( String firstName, String lastName, String email, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -103,6 +116,18 @@ public class Student {
         this.age = age;
     }
 
+    public void addBook(Book book){
+        if(!this.books.contains(book)){
+            this.books.add(book);
+            book.setStudent(this);
+        }
+    }
+    public void removeBook(Book book){
+        if(this.books.contains(book)){
+            this.books.remove(book);
+            book.setStudent(null);
+        }
+    }
     @Override
     public String toString() {
         return "Student{" +
@@ -112,6 +137,14 @@ public class Student {
                 ", email='" + email + '\'' +
                 ", age=" + age +
                 '}';
+    }
+
+    public void setStudentIdCard(StudentIdCard studentIdCard) {
+        this.studentIdCard = studentIdCard;
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 
     @Override
