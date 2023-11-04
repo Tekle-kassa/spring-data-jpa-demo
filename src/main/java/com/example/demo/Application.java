@@ -40,7 +40,19 @@ public class Application {
 
              StudentIdCard studentIdCard=new StudentIdCard("123456789",student);
              student.setStudentIdCard(studentIdCard);
-             studentRepository.save(student);
+             student.addEnrollment(new Enrollment(
+                     new EnrollmentId(1L,1L),
+                     student,
+                     new Course("EMF","ELECTRICAL ENGINEERING"),
+                     LocalDateTime.now()
+             ));
+            student.addEnrollment(new Enrollment(
+                    new EnrollmentId(1L,1L),
+                    student,new Course("machine","ELECTRICAL ENGINEERING"),
+                    LocalDateTime.now().minusDays(18)
+            ));
+
+              studentRepository.save(student);
 //             studentIdCardRepository.save(studentIdCard);
              studentRepository.findById(1L).ifPresent(s->{
                  System.out.println("fetch books lazy...");

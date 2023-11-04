@@ -65,6 +65,27 @@ public class Student {
             cascade ={CascadeType.PERSIST,CascadeType.REMOVE}
     )
     private List<Book> books=new ArrayList<>();
+
+    @OneToMany(
+            cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
+            mappedBy = "student"
+
+    )
+//    @JoinTable(
+//            name = "enrollment",
+//            joinColumns = @JoinColumn(
+//                    name = "student_id",
+//                    foreignKey = @ForeignKey(
+//                            name = "enrollment_student_id_fk"
+//                    )
+//            ),
+//            inverseJoinColumns = @JoinColumn(
+//                    name = "course_id",
+//                    foreignKey = @ForeignKey(name = "enrollment_course_id_fk")
+//            )
+//    )
+    private List<Enrollment>enrollments=new ArrayList<>();
+
     public Student( String firstName, String lastName, String email, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -103,6 +124,7 @@ public class Student {
     public String getEmail() {
         return email;
     }
+
 
     public void setEmail(String email) {
         this.email = email;
@@ -147,6 +169,17 @@ public class Student {
         return books;
     }
 
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+    public void addEnrollment(Enrollment enrollment){
+        if(!enrollments.contains(enrollment)){
+            enrollments.add(enrollment);
+        }
+    }
+    public void removeEnrollment(Enrollment enrollment){
+            enrollments.remove(enrollment);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
